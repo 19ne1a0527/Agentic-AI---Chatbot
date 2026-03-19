@@ -7,7 +7,6 @@ import os
 import re
 from functools import lru_cache
 from llm import generate_llm
-from tavily import TavilyClient
 
 MEMORY_FILE = "memory.json"
 
@@ -62,6 +61,7 @@ def web_search(query):
     tavily_api_key = os.environ.get("TAVILY_API_KEY")
     if tavily_api_key:
         try:
+            from tavily import TavilyClient
             client = TavilyClient(api_key=tavily_api_key)
             response = client.search(query=query, max_results=1)
             if response.get("results"):
