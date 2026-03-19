@@ -58,6 +58,17 @@ def retrieve(query):
 
 @lru_cache(maxsize=50)
 def web_search(query):
+    tavily_api_key = os.environ.get("TAVILY_API_KEY")
+    if tavily_api_key:
+        try:
+            from tavily import TavilyClient
+            client = TavilyClient(api_key=tavily_api_key)
+            response = client.search(query=query, max_results=1)
+            if response.get("results"):
+                return response["results"][0].get("content")
+        except Exception:
+            pass
+
     try:
         results = wikipedia.search(query)
         if results:
